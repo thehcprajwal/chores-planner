@@ -1,0 +1,47 @@
+AppShell
+  TopBar(title="Settings")
+  v-main(scrollable :style="{ background: 'var(--c-bg)' }")
+    v-container(max-width="680" class="pa-4 pb-24")
+      .mb-6
+        .settings-section-header
+          span.section-header__label Data Backup
+        p.backup-notice All data is stored locally on this device. Use cloud sync to back up and restore on other devices.
+        .list-panel
+          button.list-row.action-row(@click="exportData")
+            .action-icon.action-icon--green
+              v-icon(size="16" :color="'var(--c-success)'") mdi-download
+            .action-text
+              span.list-row__label Export to JSON
+              span.action-sub Download a full backup
+            v-icon(size="14" :color="'var(--c-text-3)'") mdi-chevron-right
+          button.list-row.action-row(@click="triggerImport")
+            .action-icon.action-icon--indigo
+              v-icon(size="16" :color="'var(--c-primary)'") mdi-upload
+            .action-text
+              span.list-row__label Import from JSON
+              span.action-sub Restore from a backup file
+            v-icon(size="14" :color="'var(--c-text-3)'") mdi-chevron-right
+        input(ref="fileInput" type="file" accept=".json" class="d-none" @change="importData")
+      .mb-6
+        .settings-section-header
+          span.section-header__label Cloud Sync
+        p.backup-notice Data syncs to your Google account automatically every 7 days. Sync now before switching devices.
+        .list-panel
+          button.list-row.action-row(@click="syncNow" :disabled="syncStore.isSyncing")
+            .action-icon.action-icon--indigo
+              v-icon(size="16" :color="'var(--c-primary)'") mdi-cloud-sync
+            .action-text
+              span.list-row__label {{ syncStore.isSyncing ? 'Syncing…' : 'Sync now' }}
+              span.action-sub {{ lastSyncLabel }}
+            v-icon(size="14" :color="'var(--c-text-3)'") mdi-chevron-right
+      p.app-version Chores Planner · v1.0
+  ConfirmDialog(
+    v-model="confirmState.open"
+    :title="confirmState.title"
+    :message="confirmState.message"
+    :confirm-label="confirmState.confirmLabel"
+    :danger="confirmState.danger"
+    @confirm="runConfirm"
+  )
+  v-snackbar(v-model="snackbar.show" :color="snackbar.color" timeout="2500" location="top")
+    | {{ snackbar.text }}

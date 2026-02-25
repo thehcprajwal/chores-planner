@@ -1,0 +1,42 @@
+AppShell
+  TopBar
+  v-main(scrollable :style="{ background: 'var(--c-bg)' }")
+    v-container(max-width="680" class="pa-0 pb-24")
+      .today-hero
+        .today-hero__inner
+          .today-hero__day {{ dayOfWeek }}
+          h1.today-hero__date {{ formattedDate }}
+          .today-hero__pills
+            span.hero-pill.hero-pill--pending(v-if="pendingCount > 0") {{ pendingCount }} remaining
+            span.hero-pill.hero-pill--done(v-else) All done
+            span.hero-pill.hero-pill--overdue(v-if="overdueCount > 0") {{ overdueCount }} overdue
+        .today-hero__bignum(aria-hidden="true") {{ dayNumber }}
+      .today-content
+        template(v-if="overdue.length")
+          .section-header
+            v-icon(size="12" :color="'var(--c-danger)'") mdi-alert-circle
+            span.section-header__label(:style="{ color: 'var(--c-danger)' }") Overdue
+            span.section-header__count.section-header__count--danger {{ overdue.length }}
+          .task-list.task-list--overdue
+            ChoreCard(v-for="inst in overdue" :key="inst.id" :instance="inst" @edit="onEdit")
+          .section-divider
+        template(v-if="todayInstances.length")
+          div(v-for="(group, slotKey) in groupedBySlot" :key="slotKey" class="mb-1")
+            .section-header
+              v-icon(size="11" :color="'var(--c-text-2)'") mdi-clock-outline
+              span.section-header__label {{ slotKey === 'unscheduled' ? 'Anytime' : slotKey }}
+              span.section-header__count {{ group.length }}
+            .task-list
+              ChoreCard(v-for="inst in group" :key="inst.id" :instance="inst" @edit="onEdit")
+        .page-empty(v-if="!todayInstances.length && !overdue.length")
+          .page-empty__icon ✨
+          p.page-empty__title Nothing scheduled today
+          p.page-empty__sub Tap + to add your first chore
+  v-fab(icon="mdi-plus" color="primary" size="large" location="bottom end" app @click="openForm()")
+  ChoreForm(
+    :is-open="formOpen"
+    :edit-chore="editingChore"
+    :edit-instance="editingInstance"
+    @update:is-open="formOpen = $event"
+    @saved="onSaved"
+  )

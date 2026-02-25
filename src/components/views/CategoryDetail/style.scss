@@ -1,0 +1,57 @@
+/* ── Chore row ────────────────────────────────────────────────────────────── */
+.chore-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--c-border-soft);
+
+  &:last-child { border-bottom: none; }
+
+  &__accent {
+    width: 3px;
+    flex-shrink: 0;
+    align-self: stretch;
+    border-radius: var(--r-sm) 0 0 var(--r-sm);
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+    padding: var(--sp-3) var(--sp-3);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+  }
+
+  &__title {
+    font-size: var(--t-base);
+    font-weight: 600;
+    color: var(--c-text);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    flex-wrap: wrap;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding-right: var(--sp-2);
+    flex-shrink: 0;
+  }
+}
+

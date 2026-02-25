@@ -1,0 +1,35 @@
+.task-row(
+  :class="{ 'task-row--done': instance.status === 'done', 'task-row--skipped': instance.status === 'skipped', 'task-row--overdue': isOverdue }"
+  @click="$emit('edit', chore, instance)"
+)
+  button.task-check(
+    @click.stop="handleDone"
+    :disabled="toggling"
+    :aria-label="instance.status === 'done' ? 'Mark pending' : 'Mark done'"
+  )
+    v-icon.task-check__icon(
+      size="22"
+      :icon="instance.status === 'done' ? 'mdi-check-circle' : instance.status === 'skipped' ? 'mdi-minus-circle-outline' : 'mdi-circle-outline'"
+      :style="{ color: instance.status === 'done' ? 'var(--c-success)' : instance.status === 'skipped' ? 'var(--c-text-3)' : isOverdue ? 'var(--c-danger)' : accentColor }"
+    )
+  .task-body
+    .task-title-row
+      span.task-title {{ chore?.title }}
+      span.tag.tag--danger(v-if="isOverdue") Overdue
+      span.tag.tag--warning(v-if="chore?.isPaused") Paused
+    p.task-desc(v-if="chore?.description") {{ chore.description }}
+    .task-meta
+      span.task-time(v-if="instance.timeSlot")
+        v-icon(size="10") mdi-clock-outline
+        | {{ formatTime(instance.timeSlot) }}
+      CategoryBadge(:category-id="chore?.categoryId")
+      span.task-recur(v-if="chore?.recurrence")
+        v-icon(size="10") mdi-refresh
+        | Recurring
+  button.task-skip(
+    :class="{ 'task-skip--active': instance.status === 'skipped' }"
+    @click.stop="handleSkip"
+    :aria-label="instance.status === 'skipped' ? 'Undo skip' : 'Skip'"
+    :title="instance.status === 'skipped' ? 'Undo skip' : 'Skip'"
+  )
+    v-icon(size="15") {{ instance.status === 'skipped' ? 'mdi-undo' : 'mdi-skip-next' }}

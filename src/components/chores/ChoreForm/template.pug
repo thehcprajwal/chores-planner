@@ -1,0 +1,159 @@
+v-dialog(
+  v-model="isOpen"
+  :fullscreen="mobile"
+  :max-width="mobile ? undefined : 520"
+  :transition="mobile ? 'dialog-bottom-transition' : 'dialog-transition'"
+  persistent
+  scrollable
+)
+  v-card(:rounded="mobile ? '0' : 'xl'" color="surface")
+    .drag-handle(v-if="mobile")
+    v-toolbar(color="surface" flat height="52")
+      v-btn(icon="mdi-close" variant="text" size="small" @click="close")
+      v-toolbar-title(style="font-size:15px; font-weight:700; letter-spacing:-0.01em")
+        | {{ isEditing ? 'Edit Chore' : 'New Chore' }}
+      v-spacer
+      v-btn(variant="flat" color="primary" size="small" rounded="lg" class="mr-3" @click="handleSubmit")
+        | {{ isEditing ? 'Save' : 'Add' }}
+    v-divider(style="border-color: var(--c-border)")
+    v-card-text.pa-0.overflow-y-auto
+      v-form(ref="formRef" @submit.prevent="handleSubmit")
+
+        //- ── Title + Notes ──────────────────────────────────────────────────
+        .cf-text
+          v-text-field(
+            v-model="form.title"
+            placeholder="What needs to be done?"
+            variant="plain"
+            class="cf-title-input"
+            :rules="[v => !!v || 'Required']"
+            autofocus
+            hide-details="auto"
+          )
+          v-textarea(
+            v-model="form.description"
+            placeholder="Add a note..."
+            variant="plain"
+            class="cf-notes-input"
+            rows="1"
+            auto-grow
+            hide-details
+          )
+
+        v-divider(style="border-color: var(--c-border)")
+
+        //- ── Properties ─────────────────────────────────────────────────────
+        .cf-props
+
+          //- Category (required)
+          v-menu(:close-on-content-click="true" location="bottom start")
+            template(#activator="{ props: mp }")
+              button.cf-row(type="button" v-bind="mp" :class="{ 'cf-row--error': categoryError }")
+                .cf-row__icon
+                  .cf-cat-dot(:style="{ background: selectedCategory?.color || 'var(--c-text-4)' }")
+                span.cf-row__label Category
+                span.cf-row__val(:class="selectedCategory ? 'cf-row__val--set' : 'cf-row__val--req'")
+                  | {{ selectedCategory?.name || 'Required' }}
+                v-icon(size="14" color="var(--c-text-3)") mdi-chevron-right
+            v-list(density="compact" rounded="lg" min-width="190" bg-color="surface" elevation="4")
+              v-list-item(
+                v-for="cat in categoriesStore.categories"
+                :key="cat.id"
+                :active="form.categoryId === cat.id"
+                active-color="primary"
+                @click="form.categoryId = cat.id; categoryError = false"
+              )
+                template(#prepend)
+                  .cf-cat-dot(:style="{ background: cat.color, marginRight: '10px' }")
+                v-list-item-title(style="font-size:13px") {{ cat.name }}
+
+          v-divider.cf-row-div
+
+          //- Date (hidden when recurring)
+          template(v-if="!form.recurrence")
+            button.cf-row(type="button" @click="dateDialog = true")
+              .cf-row__icon
+                v-icon(size="15" color="var(--c-text-2)") mdi-calendar-outline
+              span.cf-row__label Date
+              span.cf-row__val.cf-row__val--set {{ formatDateLabel(form.date) }}
+              v-icon(size="14" color="var(--c-text-3)") mdi-chevron-right
+            v-divider.cf-row-div
+
+          //- Time
+          button.cf-row(type="button" @click="timeDialog = true")
+            .cf-row__icon
+              v-icon(size="15" color="var(--c-text-2)") mdi-clock-outline
+            span.cf-row__label Time
+            span.cf-row__val(:class="{ 'cf-row__val--set': form.timeSlot }")
+              | {{ form.timeSlot ? formatTime(form.timeSlot) : 'None' }}
+            v-icon(size="14" color="var(--c-text-3)") mdi-chevron-right
+
+          //- Reminder (only when time is set)
+          template(v-if="form.timeSlot")
+            v-divider.cf-row-div
+            v-menu(:close-on-content-click="true" location="bottom start")
+              template(#activator="{ props: mp }")
+                button.cf-row(type="button" v-bind="mp")
+                  .cf-row__icon
+                    v-icon(size="15" color="var(--c-text-2)") mdi-bell-outline
+                  span.cf-row__label Reminder
+                  span.cf-row__val(:class="{ 'cf-row__val--set': form.reminderMinutesBefore }")
+                    | {{ selectedReminderLabel }}
+                  v-icon(size="14" color="var(--c-text-3)") mdi-chevron-right
+              v-list(density="compact" rounded="lg" min-width="160" bg-color="surface" elevation="4")
+                v-list-item(
+                  v-for="opt in reminderOptions"
+                  :key="String(opt.value)"
+                  :active="form.reminderMinutesBefore === opt.value"
+                  active-color="primary"
+                  @click="form.reminderMinutesBefore = opt.value"
+                )
+                  v-list-item-title(style="font-size:13px") {{ opt.label }}
+
+        v-divider(style="border-color: var(--c-border)")
+
+        //- ── Recurrence ─────────────────────────────────────────────────────
+        .cf-repeat
+          RecurrenceEditor(v-model="form.recurrence")
+
+//- Date picker
+v-dialog(v-model="dateDialog" max-width="360")
+  v-card(rounded="xl" elevation="0" style="border: 1px solid var(--c-border-strong); overflow: hidden")
+    VDatePicker(
+      :model-value="datePickerModel"
+      color="primary"
+      show-adjacent-months
+      hide-actions
+      @update:model-value="onDateSelected"
+    )
+    v-divider(style="border-color: var(--c-border)")
+    .d-flex.justify-end.pa-2.ga-2
+      v-btn(variant="text" size="small" @click="dateDialog = false") Cancel
+      v-btn(color="primary" variant="flat" size="small" rounded="lg" @click="dateDialog = false") Done
+
+//- Time picker
+v-dialog(v-model="timeDialog" max-width="340")
+  v-card(rounded="xl" elevation="0" style="border: 1px solid var(--c-border-strong); overflow: hidden")
+    VTimePicker(
+      :model-value="timePickerModel"
+      format="ampm"
+      color="primary"
+      @update:model-value="onTimeSelected"
+    )
+    v-divider(style="border-color: var(--c-border)")
+    .d-flex.justify-space-between.align-center.pa-2
+      v-btn(variant="text" size="small" color="error" @click="form.timeSlot = null; timeDialog = false") Clear
+      v-btn(color="primary" variant="flat" size="small" rounded="lg" @click="timeDialog = false") Done
+
+//- Edit scope (recurring chores)
+v-dialog(v-model="showEditScope" max-width="360" persistent)
+  v-card(rounded="xl" elevation="0" style="border: 1px solid var(--c-border-strong)")
+    v-card-title.pt-5.px-5(style="font-size:15px; font-weight:700; letter-spacing:-0.01em") Editing a recurring chore
+    v-card-text.px-5
+      p(style="font-size: var(--t-md); color: var(--c-text-2); margin-bottom: 16px")
+        | Do you want to change just this date, or this and all future occurrences?
+      .d-flex.flex-column.ga-2
+        v-btn(variant="tonal" color="secondary" block @click="applyEdit('instance')") This date only
+        v-btn(variant="flat" color="primary" block @click="applyEdit('future')") This and all future
+    v-card-actions.px-5.pb-4
+      v-btn(variant="text" color="secondary" block @click="showEditScope = false") Cancel

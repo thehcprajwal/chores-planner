@@ -1,0 +1,59 @@
+AppShell
+  TopBar(:title="category ? category.name : ''" :subtitle="chores.length + (chores.length === 1 ? ' chore' : ' chores')" :back="true")
+  v-main(scrollable :style="{ background: 'var(--c-bg)' }")
+    v-container(max-width="680" class="pa-4 pb-24")
+
+      //- Category not found
+      .page-empty(v-if="!category")
+        .page-empty__icon 🏷️
+        p.page-empty__title Category not found
+
+      template(v-else)
+        //- Chore list
+        .list-panel(v-if="chores.length")
+          .chore-row(v-for="chore in chores" :key="chore.id")
+            .chore-row__accent(:style="{ background: category.color }")
+            .chore-row__body
+              .chore-row__top
+                span.chore-row__title {{ chore.title }}
+                span.tag.tag--warning(v-if="chore.isPaused") Paused
+              .chore-row__meta
+                span.meta-text(v-if="chore.recurrence")
+                  v-icon(size="10") mdi-refresh
+                  |  {{ recurrenceLabel(chore.recurrence) }}
+                span.meta-text(v-if="chore.timeSlot")
+                  v-icon(size="10") mdi-clock-outline
+                  |  {{ chore.timeSlot }}
+            .chore-row__actions
+              button.icon-btn(:title="chore.isPaused ? 'Resume' : 'Pause'" @click="togglePause(chore)")
+                v-icon(size="15" :color="chore.isPaused ? 'var(--c-success)' : 'var(--c-text-2)'")
+                  | {{ chore.isPaused ? 'mdi-play' : 'mdi-pause' }}
+              button.icon-btn(title="Edit" @click="editChore(chore)")
+                v-icon(size="15" :color="'var(--c-text-2)'") mdi-pencil-outline
+              button.icon-btn.icon-btn--danger(title="Delete" @click="deleteChore(chore)")
+                v-icon(size="15" :color="'var(--c-danger)'") mdi-trash-can-outline
+
+        //- Empty state
+        .page-empty(v-else)
+          .page-empty__icon ✅
+          p.page-empty__title No chores in this category
+          p.page-empty__sub Tap + to add one
+
+
+  v-fab(icon="mdi-plus" color="primary" size="large" location="bottom end" app @click="openForm()")
+  ChoreForm(
+    :is-open="formOpen"
+    :edit-chore="editingChore"
+    :edit-instance="null"
+    :default-category-id="categoryId"
+    @update:is-open="formOpen = $event"
+    @saved="onSaved"
+  )
+  ConfirmDialog(
+    v-model="confirmState.open"
+    :title="confirmState.title"
+    :message="confirmState.message"
+    :confirm-label="'Delete'"
+    :danger="true"
+    @confirm="runConfirm"
+  )

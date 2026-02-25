@@ -1,0 +1,19 @@
+v-bottom-navigation(
+  :model-value="activeTab"
+  bg-color="surface"
+  color="primary"
+  grow
+  height="60"
+  elevation="0"
+  border="t"
+)
+  v-btn(
+    v-for="item in navItems"
+    :key="item.to"
+    :value="item.to"
+    :to="item.to"
+    stacked
+    height="60"
+  )
+    v-icon(size="20") {{ $route.path === item.to ? item.iconActive : item.icon }}
+    span.nav-label {{ item.label }}

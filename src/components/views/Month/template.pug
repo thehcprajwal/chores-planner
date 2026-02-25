@@ -1,0 +1,39 @@
+AppShell
+  TopBar(title="Month" :subtitle="monthLabel")
+    template(#actions)
+      v-btn(icon="mdi-chevron-left" variant="text" density="compact" size="small" @click="prevMonth")
+      v-btn(icon="mdi-chevron-right" variant="text" density="compact" size="small" @click="nextMonth")
+  v-main(scrollable :style="{ background: 'var(--c-bg)' }")
+    .month-wrap
+      .month-dow
+        .month-dow__cell(v-for="d in ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']" :key="d") {{ d }}
+      .month-grid
+        .month-cell(
+          v-for="cell in calendarCells"
+          :key="cell.key"
+          :class="{ 'month-cell--today': cell.isToday, 'month-cell--empty': !cell.dayNum }"
+          @click="cell.dateStr && openForm()"
+        )
+          .month-cell__num(
+            v-if="cell.dayNum"
+            :class="{ 'month-cell__num--today': cell.isToday }"
+          ) {{ cell.dayNum }}
+          template(v-if="cell.dateStr")
+            .month-dot-row(
+              v-for="inst in getInstancesForDate(cell.dateStr).slice(0, 3)"
+              :key="inst.id"
+              :class="`month-dot-row--${chipStatus(inst)}`"
+              @click.stop="openEditForInstance(inst)"
+            )
+              span.month-dot
+              span.month-dot-label {{ getChore(inst)?.title }}
+            .month-more(v-if="getInstancesForDate(cell.dateStr).length > 3")
+              | +{{ getInstancesForDate(cell.dateStr).length - 3 }} more
+  v-fab(icon="mdi-plus" color="primary" size="large" location="bottom end" app @click="openForm")
+  ChoreForm(
+    :is-open="formOpen"
+    :edit-chore="editingChore"
+    :edit-instance="editingInstance"
+    @update:is-open="formOpen = $event"
+    @saved="onSaved"
+  )

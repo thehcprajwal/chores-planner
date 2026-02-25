@@ -1,0 +1,66 @@
+/* ── Section header row ──────────────────────────────────────────────────── */
+.settings-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-2);
+  padding: 0 2px;
+}
+
+/* ── Row label ───────────────────────────────────────────────────────────── */
+.list-row__label {
+  font-size: var(--t-md);
+  font-weight: 500;
+  color: var(--c-text);
+  flex: 1;
+}
+
+/* ── Action rows (export/import/sync) ────────────────────────────────────── */
+.action-row {
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  &:hover { background: var(--c-hover); }
+}
+.action-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  &--green  { background: var(--c-success-bg); }
+  &--indigo { background: var(--c-primary-bg); }
+  &--red    { background: var(--c-danger-bg); }
+}
+.action-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.action-sub {
+  font-size: var(--t-sm);
+  color: var(--c-text-2);
+  margin-top: 1px;
+}
+
+/* ── Backup notice ───────────────────────────────────────────────────────── */
+.backup-notice {
+  font-size: var(--t-md);
+  color: var(--c-text-2);
+  margin: 0 2px var(--sp-2);
+  line-height: 1.5;
+}
+
+/* ── Version ─────────────────────────────────────────────────────────────── */
+.app-version {
+  text-align: center;
+  font-size: var(--t-md);
+  color: var(--c-text-3);
+  padding-bottom: var(--sp-2);
+  margin: 0;
+}

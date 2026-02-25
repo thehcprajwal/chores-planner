@@ -1,0 +1,86 @@
+.week-wrap {
+  height: calc(100vh - 52px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Day headers ─────────────────────────────────────────────────────────── */
+.week-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-border);
+  flex-shrink: 0;
+
+  &__cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0 8px;
+  }
+  &__dow {
+    font-size: var(--t-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--c-text-2);
+  }
+  &__cell--today &__dow { color: var(--c-primary); }
+  &__num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--t-md);
+    font-weight: 600;
+    margin-top: 3px;
+    color: var(--c-text);
+    &--today { background: var(--c-primary); color: var(--c-white); }
+  }
+}
+
+/* ── Grid ────────────────────────────────────────────────────────────────── */
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  flex: 1;
+  overflow-y: auto;
+}
+.week-col {
+  border-right: 1px solid var(--c-border-soft);
+  padding: var(--sp-1);
+  cursor: pointer;
+  transition: background 0.1s;
+
+  &:last-child { border-right: 0; }
+  &--today     { background: var(--c-primary-bg); }
+  &:hover      { background: var(--c-hover); }
+}
+
+/* ── Chip ────────────────────────────────────────────────────────────────── */
+.week-chip {
+  border-radius: var(--r-sm);
+  padding: 3px 5px;
+  margin-bottom: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  transition: opacity 0.1s;
+  &:hover { opacity: 0.8; }
+
+  &__dot   { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  &__label { font-size: var(--t-xs); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+  &__time  { font-size: 9px; opacity: 0.65; flex-shrink: 0; }
+
+  &--default { background: var(--c-primary-bg);  color: var(--c-primary-dark);
+    .week-chip__dot { background: var(--c-primary); } }
+  &--done    { background: var(--c-success-bg);   color: var(--c-success);
+    .week-chip__dot { background: var(--c-success); } }
+  &--skip    { background: rgba(0,0,0,0.05);       color: var(--c-text-2);
+    .week-chip__dot { background: var(--c-text-3); } }
+  &--overdue { background: var(--c-danger-bg);    color: var(--c-danger);
+    .week-chip__dot { background: var(--c-danger); } }
+}

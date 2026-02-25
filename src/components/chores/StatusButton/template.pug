@@ -1,0 +1,17 @@
+.d-flex.align-center.ga-1
+  v-btn(
+    :icon="status === 'done' ? 'mdi-check-circle' : 'mdi-check-circle-outline'"
+    :color="status === 'done' ? 'success' : 'grey-lighten-1'"
+    size="small"
+    variant="text"
+    :title="status === 'done' ? 'Mark pending' : 'Mark done'"
+    @click.stop="$emit('done')"
+  )
+  v-btn(
+    :icon="status === 'skipped' ? 'mdi-skip-next-circle' : 'mdi-skip-next-circle-outline'"
+    :color="status === 'skipped' ? 'grey' : 'grey-lighten-1'"
+    size="small"
+    variant="text"
+    :title="status === 'skipped' ? 'Mark pending' : 'Skip'"
+    @click.stop="$emit('skip')"
+  )

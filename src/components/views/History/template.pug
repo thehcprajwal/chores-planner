@@ -1,0 +1,51 @@
+AppShell
+  v-main(scrollable :style="{ background: 'var(--c-bg)' }")
+    v-container(max-width="680" class="pa-0 pb-24")
+      .history-header
+        h1.history-title History
+
+      //- Filter bar
+      .filter-bar
+        .filter-group
+          button.filter-pill(
+            v-for="s in [{ val: 'all', label: 'All' }, { val: 'done', label: 'Done' }, { val: 'skipped', label: 'Skipped' }]"
+            :key="s.val"
+            :class="{ 'filter-pill--active': statusFilter === s.val }"
+            @click="statusFilter = s.val"
+          ) {{ s.label }}
+        .filter-group
+          button.filter-pill(
+            v-for="r in [{ val: '7', label: '7 days' }, { val: '30', label: '30 days' }, { val: 'all', label: 'All time' }]"
+            :key="r.val"
+            :class="{ 'filter-pill--active': rangeFilter === r.val }"
+            @click="rangeFilter = r.val"
+          ) {{ r.label }}
+
+      //- Date-grouped list
+      template(v-if="sortedDates.length")
+        div(v-for="dateStr in sortedDates" :key="dateStr")
+          .section-header
+            span.section-header__label {{ labelForDate(dateStr) }}
+            span.section-header__count {{ grouped[dateStr].length }}
+          .history-list
+            .history-row(
+              v-for="inst in grouped[dateStr]"
+              :key="inst.id"
+              :style="{ '--accent': accentColorFor(inst.choreId) }"
+            )
+              .history-row__accent
+              .history-row__body
+                .history-row__top
+                  span.history-row__title {{ choreFor(inst.choreId)?.title || '—' }}
+                  span.status-badge(:class="inst.status === 'done' ? 'status-badge--done' : 'status-badge--skipped'")
+                    | {{ inst.status === 'done' ? 'Done' : 'Skipped' }}
+                .history-row__meta
+                  CategoryBadge(v-if="choreFor(inst.choreId)?.categoryId" :category-id="choreFor(inst.choreId).categoryId")
+                  span.meta-text(v-if="inst.timeSlot") · {{ inst.timeSlot }}
+                  span.meta-text(v-if="completionTime(inst)") · at {{ completionTime(inst) }}
+
+      //- Empty state
+      .page-empty(v-else)
+        .page-empty__icon 📋
+        p.page-empty__title No completed tasks in this range
+        p.page-empty__sub Try selecting a wider date range

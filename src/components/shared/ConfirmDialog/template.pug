@@ -1,0 +1,11 @@
+v-dialog(v-model="model" max-width="360")
+  v-card.confirm-card(rounded="xl" elevation="0")
+    v-card-text.confirm-body
+      .confirm-header
+        .confirm-icon(v-if="danger")
+          v-icon(size="18" color="error") mdi-alert-circle-outline
+        p.confirm-title {{ title }}
+      p.confirm-message(v-if="message") {{ message }}
+    v-card-actions.confirm-actions
+      v-btn(variant="text" rounded="lg" @click="cancel") Cancel
+      v-btn(:color="danger ? 'error' : 'primary'" variant="flat" rounded="lg" @click="handleConfirm") {{ confirmLabel }}

@@ -1,0 +1,73 @@
+/*
+ * ─── Design Tokens ───────────────────────────────────────────────────────────
+ * Single source of truth for all design values.
+ * Imported once in main.js — available globally in every component.
+ *
+ * Naming convention:
+ *   --c-*   colors          --r-*   radius
+ *   --sp-*  spacing         --t-*   type scale
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+:root {
+  /* ── Brand ─────────────────────────────────────────────────────────────── */
+  --c-primary:        #5B5FDE;
+  --c-primary-dark:   #4347C9;
+  --c-primary-bg:     rgba(91, 95, 222, 0.08);
+  --c-primary-border: rgba(91, 95, 222, 0.25);
+
+  /* ── Status ─────────────────────────────────────────────────────────────── */
+  --c-success:        #059669;
+  --c-success-bg:     rgba(5, 150, 105, 0.08);
+  --c-warning:        #D97706;
+  --c-warning-bg:     rgba(217, 119, 6, 0.10);
+  --c-danger:         #DC2626;
+  --c-danger-bg:      rgba(220, 38, 38, 0.08);
+  --c-danger-border:  rgba(220, 38, 38, 0.18);
+
+  /* ── Surfaces ───────────────────────────────────────────────────────────── */
+  --c-bg:             #F7F6F3;
+  --c-surface:        #FFFFFF;
+  --c-white:          #FFFFFF;   /* text on coloured backgrounds */
+
+  /* ── Text ───────────────────────────────────────────────────────────────── */
+  --c-text:           #1C1917;   /* primary — warm near-black  */
+  --c-text-2:         #78716C;   /* secondary — warm stone     */
+  --c-text-3:         #A8A29E;   /* tertiary — muted           */
+  --c-text-4:         #D6D3D1;   /* disabled / placeholder     */
+
+  /* ── Borders ────────────────────────────────────────────────────────────── */
+  --c-border:         rgba(0, 0, 0, 0.07);
+  --c-border-soft:    rgba(0, 0, 0, 0.05);
+  --c-border-strong:  rgba(0, 0, 0, 0.12);
+  --c-hover:          rgba(0, 0, 0, 0.03);
+
+  /* ── Radius ─────────────────────────────────────────────────────────────── */
+  --r-sm:  6px;
+  --r-md:  8px;
+  --r-lg:  12px;
+  --r-xl:  20px;
+  --r-2xl: 24px;
+
+  /* ── Spacing (4 px grid) ─────────────────────────────────────────────────── */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  24px;
+  --sp-6:  32px;
+
+  /* ── Type scale ─────────────────────────────────────────────────────────── */
+  --t-xs:   10px;
+  --t-sm:   11px;
+  --t-md:   13px;
+  --t-base: 14px;
+  --t-lg:   15px;
+  --t-xl:   17px;
+  --t-2xl:  22px;
+  --t-3xl:  28px;
+
+  /* ── Shadows ────────────────────────────────────────────────────────────── */
+  --sh-sm:  0 1px 4px rgba(0, 0, 0, 0.06);
+  --sh-md:  0 4px 16px rgba(0, 0, 0, 0.08);
+  --sh-dialog: 0 0 0 1px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.12);
+}

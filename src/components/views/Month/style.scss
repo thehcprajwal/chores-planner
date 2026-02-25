@@ -1,0 +1,70 @@
+.month-wrap { display: flex; flex-direction: column; }
+
+/* ── DOW headers ─────────────────────────────────────────────────────────── */
+.month-dow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-border);
+
+  &__cell {
+    text-align: center;
+    padding: 8px 0;
+    font-size: var(--t-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--c-text-2);
+  }
+}
+
+/* ── Calendar grid ───────────────────────────────────────────────────────── */
+.month-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+.month-cell {
+  border-right: 1px solid var(--c-border-soft);
+  border-bottom: 1px solid var(--c-border-soft);
+  min-height: 88px;
+  padding: var(--sp-1);
+  background: var(--c-surface);
+  cursor: pointer;
+  transition: background 0.1s;
+
+  &:nth-child(7n) { border-right: 0; }
+  &:hover         { background: var(--c-hover); }
+  &--today        { background: var(--c-primary-bg); }
+  &--empty        { cursor: default; background: var(--c-bg); pointer-events: none; }
+
+  &__num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--t-sm);
+    font-weight: 600;
+    margin-bottom: 3px;
+    color: var(--c-text);
+    &--today { background: var(--c-primary); color: var(--c-white); }
+  }
+}
+
+/* ── Dot rows ────────────────────────────────────────────────────────────── */
+.month-dot-row {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 2px;
+  border-radius: 3px;
+  margin-bottom: 1px;
+  cursor: pointer;
+  &:hover { opacity: 0.75; }
+}
+.month-dot       { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.month-dot-label { font-size: var(--t-xs); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.month-more      { font-size: var(--t-xs); color: var(--c-text-3); padding: 0 2px; font-weight: 500; }
+
+.month-dot-row--default { .month-dot { background: var(--c-primary); }      .month-dot-label { color: var(--c-primary-dark); } }
+.month-dot-row--done    { .month-dot { background: var(--c-success); }      .month-dot-label { color: var(--c-success); } }
+.month-dot-row--skip    { .month-dot { background: var(--c-text-3); }        .month-dot-label { color: var(--c-text-2); } }
+.month-dot-row--overdue { .month-dot { background: var(--c-danger); }       .month-dot-label { color: var(--c-danger); } }

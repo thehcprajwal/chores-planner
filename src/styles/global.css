@@ -1,0 +1,71 @@
+/*
+ * ─── Global styles ───────────────────────────────────────────────────────────
+ * App-wide resets, font loading, and Vuetify overrides.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+/* ── Reset ──────────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Font override ───────────────────────────────────────────────────────────── */
+.v-application,
+.v-application * {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+/* ── Scrollbars (Webkit) ─────────────────────────────────────────────────────── */
+::-webkit-scrollbar         { width: 5px; height: 5px; }
+::-webkit-scrollbar-track   { background: transparent; }
+::-webkit-scrollbar-thumb   { background: rgba(0,0,0,0.15); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
+
+/* ── Vuetify overrides ───────────────────────────────────────────────────────── */
+.v-overlay-scroll-blocked   { padding-right: 0 !important; }
+
+.v-overlay__content .v-card {
+  box-shadow: var(--sh-dialog) !important;
+}
+
+.v-navigation-drawer {
+  border-right: 1px solid var(--c-border) !important;
+  box-shadow: none !important;
+}
+
+.v-app-bar {
+  border-bottom: 1px solid var(--c-border) !important;
+  box-shadow: none !important;
+}
+
+.v-field--focused .v-field__outline {
+  --v-field-border-width: 2px;
+}
+
+/* ── FAB — sits above bottom nav on mobile ────────────────────────────────────── */
+.v-fab--app {
+  bottom: calc(60px + 16px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+/* ── Buttons — remove Material Design uppercase ───────────────────────────────── */
+.v-btn { text-transform: none !important; letter-spacing: 0 !important; font-weight: 600 !important; }
+
+/* ── Typography utilities ─────────────────────────────────────────────────────── */
+.text-label {
+  font-size: var(--t-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.text-ui {
+  font-size: var(--t-md);
+  font-weight: 500;
+}

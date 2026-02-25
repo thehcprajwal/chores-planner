@@ -1,0 +1,39 @@
+div
+  .recur-label Repeat
+  .recur-pills
+    button(
+      v-for="t in recurrenceTypes"
+      :key="t.value"
+      type="button"
+      class="recur-pill"
+      :class="{ 'recur-pill--active': localType === t.value }"
+      @click="selectType(t.value)"
+    ) {{ t.label }}
+  .recur-extra(v-if="localType === 'weekly'")
+    .weekday-row
+      button(
+        v-for="(day, idx) in weekDays"
+        :key="idx"
+        type="button"
+        class="day-btn"
+        :class="{ 'day-btn--active': localDaysOfWeek.includes(idx) }"
+        @click="toggleDay(idx)"
+      ) {{ day }}
+  .recur-extra(v-if="localType === 'monthly'")
+    .recur-inline-field
+      span.recur-inline-label On day
+      input(v-model.number="localDayOfMonth" type="number" min="1" max="31" class="recur-number-input")
+      span.recur-inline-suffix of each month
+  .recur-extra(v-if="localType === 'custom'")
+    .recur-inline-field
+      span.recur-inline-label Every
+      input(v-model.number="localIntervalDays" type="number" min="1" class="recur-number-input")
+      span.recur-inline-suffix days
+  .recur-dates(v-if="localType")
+    .recur-date-row
+      .recur-date-field
+        label.recur-date-label Starts
+        input.recur-date-input(v-model="localStartDate" type="date")
+      .recur-date-field
+        label.recur-date-label Ends (optional)
+        input.recur-date-input(v-model="localEndDate" type="date")

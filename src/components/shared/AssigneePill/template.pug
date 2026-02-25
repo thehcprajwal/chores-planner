@@ -1,0 +1,4 @@
+span.assignee-pill(v-if="assignee")
+  span.assignee-pill__avatar(:style="{ background: assignee.avatarColor }")
+    | {{ assignee.name[0].toUpperCase() }}
+  | {{ assignee.name }}

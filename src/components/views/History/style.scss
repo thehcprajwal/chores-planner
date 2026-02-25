@@ -1,0 +1,131 @@
+/* ── Page header ──────────────────────────────────────────────────────────── */
+.history-header {
+  padding: var(--sp-5) var(--sp-4) var(--sp-3);
+}
+
+.history-title {
+  font-size: var(--t-2xl);
+  font-weight: 800;
+  color: var(--c-text);
+  margin: 0;
+  letter-spacing: -0.03em;
+}
+
+/* ── Filter bar ───────────────────────────────────────────────────────────── */
+.filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: 0 var(--sp-4) var(--sp-4);
+}
+
+.filter-group {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px var(--sp-3);
+  border-radius: var(--r-xl);
+  border: 1.5px solid var(--c-border-strong);
+  background: var(--c-surface);
+  font-size: var(--t-md);
+  font-weight: 500;
+  color: var(--c-text-2);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+
+  &:hover {
+    background: var(--c-hover);
+  }
+
+  &--active {
+    background: var(--c-primary-bg);
+    border-color: var(--c-primary-border);
+    color: var(--c-primary);
+    font-weight: 600;
+  }
+}
+
+/* ── History list ─────────────────────────────────────────────────────────── */
+.history-list {
+  background: var(--c-surface);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--c-border);
+  margin: 0 var(--sp-4) var(--sp-3);
+  overflow: hidden;
+}
+
+/* ── History row ──────────────────────────────────────────────────────────── */
+.history-row {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--c-border-soft);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.history-row__accent {
+  width: 3px;
+  flex-shrink: 0;
+  background: var(--accent);
+  border-radius: var(--r-sm) 0 0 var(--r-sm);
+}
+
+.history-row__body {
+  flex: 1;
+  padding: var(--sp-3) var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.history-row__top {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  justify-content: space-between;
+}
+
+.history-row__title {
+  font-size: var(--t-base);
+  font-weight: 600;
+  color: var(--c-text);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history-row__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+/* ── Status badge ─────────────────────────────────────────────────────────── */
+.status-badge {
+  font-size: var(--t-sm);
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--r-xl);
+  flex-shrink: 0;
+
+  &--done {
+    background: var(--c-success-bg);
+    color: var(--c-success);
+  }
+
+  &--skipped {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--c-text-2);
+  }
+}

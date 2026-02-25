@@ -1,0 +1,17 @@
+.login-page
+  .login-card
+    .login-logo
+      v-icon(size="48" color="var(--c-primary)") mdi-checkbox-marked-circle-outline
+    h1.login-title Chores Planner
+    p.login-sub Stay on top of your household tasks
+    v-btn(
+      variant="outlined"
+      rounded="lg"
+      size="large"
+      class="login-btn"
+      :loading="loading"
+      @click="signInWithGoogle"
+    )
+      v-icon(start) mdi-google
+      | Sign in with Google
+    p.login-error(v-if="error") {{ error }}

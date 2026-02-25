@@ -1,0 +1,23 @@
+v-navigation-drawer(
+  :model-value="true"
+  :permanent="true"
+  width="220"
+  color="background"
+)
+  .sidenav-brand
+    .sidenav-brand__icon
+      v-icon(color="white" size="16") mdi-check-all
+    span.sidenav-brand__name Chores
+  v-divider.mx-3.mb-2
+  .sidenav-section
+    .sidenav-label Views
+    nav
+      RouterLink(
+        v-for="item in navItems"
+        :key="item.to"
+        :to="item.to"
+        class="sidenav-item"
+        :class="{ 'sidenav-item--active': $route.path === item.to }"
+      )
+        v-icon(size="16" class="sidenav-item__icon") {{ item.icon }}
+        span.sidenav-item__label {{ item.label }}

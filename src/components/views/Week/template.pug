@@ -1,0 +1,40 @@
+AppShell
+  TopBar(title="Week" :subtitle="weekLabel")
+    template(#actions)
+      v-btn(icon="mdi-chevron-left" variant="text" density="compact" size="small" @click="prevWeek")
+      v-btn(icon="mdi-chevron-right" variant="text" density="compact" size="small" @click="nextWeek")
+  v-main(scrollable :style="{ background: 'var(--c-bg)' }")
+    .week-wrap
+      .week-header
+        .week-header__cell(
+          v-for="day in weekDays"
+          :key="day.dateStr"
+          :class="{ 'week-header__cell--today': day.isToday }"
+        )
+          span.week-header__dow {{ day.dayName }}
+          .week-header__num(:class="{ 'week-header__num--today': day.isToday }") {{ day.dayNum }}
+      .week-grid
+        .week-col(
+          v-for="day in weekDays"
+          :key="day.dateStr"
+          :class="{ 'week-col--today': day.isToday }"
+          @click="openForm"
+        )
+          .week-chip(
+            v-for="inst in getInstancesForDate(day.dateStr)"
+            :key="inst.id"
+            :class="`week-chip--${chipStatus(inst)}`"
+            :title="getChore(inst)?.title"
+            @click.stop="openEditForInstance(inst)"
+          )
+            span.week-chip__dot
+            span.week-chip__label {{ getChore(inst)?.title }}
+            span.week-chip__time(v-if="inst.timeSlot") {{ inst.timeSlot }}
+  v-fab(icon="mdi-plus" color="primary" size="large" location="bottom end" app @click="openForm")
+  ChoreForm(
+    :is-open="formOpen"
+    :edit-chore="editingChore"
+    :edit-instance="editingInstance"
+    @update:is-open="formOpen = $event"
+    @saved="onSaved"
+  )

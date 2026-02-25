@@ -1,0 +1,88 @@
+/* ── Repeat label ────────────────────────────────────────────────────────── */
+.recur-label {
+  font-size: var(--t-md);
+  font-weight: 700;
+  color: var(--c-text-2);
+  margin-bottom: 10px;
+}
+
+/* ── Type pills ──────────────────────────────────────────────────────────── */
+.recur-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+.recur-pill {
+  font-size: var(--t-sm);
+  font-weight: 500;
+  color: var(--c-text-2);
+  background: var(--c-border-soft);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-xl);
+  padding: 5px 13px;
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+  user-select: none;
+
+  &:hover   { background: var(--c-hover); }
+  &--active { background: var(--c-primary-bg); border-color: var(--c-primary-border); color: var(--c-primary-dark); font-weight: 600; }
+}
+
+/* ── Extra options ───────────────────────────────────────────────────────── */
+.recur-extra { margin-top: 12px; }
+
+.weekday-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.day-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  font-size: var(--t-sm); font-weight: 600;
+  border: 1px solid var(--c-border-strong);
+  background: none;
+  cursor: pointer;
+  color: var(--c-text-2);
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+  display: flex; align-items: center; justify-content: center;
+
+  &:hover   { background: var(--c-border-soft); }
+  &--active { background: var(--c-primary); border-color: var(--c-primary); color: var(--c-white); }
+}
+
+.recur-inline-field { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.recur-inline-label, .recur-inline-suffix {
+  font-size: var(--t-md);
+  color: var(--c-text-2);
+  font-weight: 500;
+}
+.recur-number-input {
+  width: 60px;
+  font-size: var(--t-md);
+  font-weight: 600;
+  color: var(--c-text);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-md);
+  padding: 5px 8px;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.15s;
+
+  &:focus { border-color: var(--c-primary); }
+}
+
+/* ── Start / End dates ───────────────────────────────────────────────────── */
+.recur-dates { margin-top: 14px; }
+.recur-date-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.recur-date-field { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 130px; }
+.recur-date-label {
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--c-text-3);
+}
+.recur-date-input {
+  font-size: var(--t-md);
+  font-weight: 500;
+  color: var(--c-text);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-md);
+  padding: 7px 10px;
+  outline: none;
+  background: var(--c-hover);
+  transition: border-color 0.15s;
+  width: 100%;
+
+  &:focus { border-color: var(--c-primary); background: var(--c-surface); }
+}

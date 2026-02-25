@@ -1,0 +1,91 @@
+/* ── Drag handle ─────────────────────────────────────────────────────────── */
+.drag-handle {
+  width: 36px; height: 4px; border-radius: 2px;
+  background: var(--c-border-strong);
+  margin: 10px auto 6px;
+}
+
+/* ── Title + notes ───────────────────────────────────────────────────────── */
+.cf-text { padding: 4px 16px 12px; }
+
+.cf-title-input {
+  :deep(.v-field) { padding: 0; }
+  :deep(.v-field__input) {
+    font-size: var(--t-xl);
+    font-weight: 600;
+    color: var(--c-text);
+    padding: 8px 0 4px;
+    min-height: 36px;
+  }
+  :deep(input::placeholder) { color: var(--c-text-3); font-weight: 400; }
+}
+
+.cf-notes-input {
+  :deep(.v-field) { padding: 0; }
+  :deep(.v-field__input) {
+    font-size: var(--t-md);
+    color: var(--c-text-2);
+    padding: 0 0 8px;
+    min-height: 28px;
+  }
+  :deep(textarea::placeholder) { color: var(--c-text-4); }
+}
+
+/* ── Property rows ───────────────────────────────────────────────────────── */
+.cf-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  width: 100%;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  text-align: left;
+  transition: background 0.1s;
+
+  &:hover  { background: var(--c-hover); }
+  &:active { background: rgba(0, 0, 0, 0.05); }
+  &--error { background: rgba(220, 38, 38, 0.04); }
+}
+
+.cf-row__icon {
+  width: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cf-row__label {
+  font-size: var(--t-base);
+  font-weight: 500;
+  color: var(--c-text);
+  flex: 1;
+}
+
+.cf-row__val {
+  font-size: var(--t-base);
+  color: var(--c-text-3);
+
+  &--set { color: var(--c-text-2); }
+  &--req { color: var(--c-danger); font-weight: 500; font-size: var(--t-md); }
+}
+
+/* Indented divider between rows */
+.cf-row-div {
+  margin-left: 50px !important;
+  border-color: var(--c-border-soft) !important;
+}
+
+/* Category color dot */
+.cf-cat-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* ── Repeat section ──────────────────────────────────────────────────────── */
+.cf-repeat { padding: 16px; }

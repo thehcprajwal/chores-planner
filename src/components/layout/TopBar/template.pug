@@ -1,0 +1,24 @@
+v-app-bar(elevation="0" color="surface" height="52")
+  template(v-if="back" #prepend)
+    v-btn(icon="mdi-arrow-left" variant="text" size="small" @click="goBack")
+  v-app-bar-title
+    .topbar-title
+      span.topbar-title__main {{ title }}
+      span.topbar-title__sub(v-if="subtitle") {{ subtitle }}
+  template(#append)
+    slot(name="actions")
+    v-menu(v-if="user" location="bottom end" :offset="[4, 8]")
+      template(#activator="{ props: menuProps }")
+        button.avatar-btn(v-bind="menuProps")
+          img.avatar-btn__img(v-if="user.photoURL" :src="user.photoURL" :alt="user.displayName || user.email" referrerpolicy="no-referrer")
+          span.avatar-btn__initials(v-else) {{ userInitial }}
+      v-list(rounded="lg" elevation="4" min-width="230" class="pa-2" bg-color="surface" :style="{ border: '1px solid var(--c-border)' }")
+        .avatar-menu-header
+          img.avatar-menu-header__photo(v-if="user.photoURL" :src="user.photoURL" referrerpolicy="no-referrer")
+          .avatar-menu-header__initial(v-else) {{ userInitial }}
+          .avatar-menu-header__info
+            p.avatar-menu-header__name {{ user.displayName || 'User' }}
+            p.avatar-menu-header__email {{ user.email }}
+        v-divider.my-2
+        v-list-item(rounded="lg" base-color="error" prepend-icon="mdi-logout" @click="logout" class="px-3")
+          v-list-item-title.avatar-menu-signout Sign out

@@ -1,0 +1,90 @@
+/* ── Hero header ─────────────────────────────────────────────────────────── */
+.today-hero {
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-border);
+  padding: 20px 20px 16px;
+  position: relative;
+  overflow: hidden;
+
+  &__inner { position: relative; z-index: 1; }
+
+  &__day {
+    font-size: var(--t-sm);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--c-primary);
+    margin-bottom: 2px;
+  }
+
+  &__date {
+    font-size: var(--t-2xl);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--c-text);
+    margin: 0 0 12px;
+  }
+
+  &__bignum {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    font-size: 88px;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    color: rgba(0, 0, 0, 0.055);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &__pills {
+    display: flex;
+    gap: var(--sp-1);
+    flex-wrap: wrap;
+  }
+}
+
+/* ── Stat pills ──────────────────────────────────────────────────────────── */
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--t-md);
+  font-weight: 600;
+  border-radius: var(--r-xl);
+  padding: 4px 10px;
+
+  &--pending { background: var(--c-primary-bg);  color: var(--c-primary-dark); }
+  &--done    { background: var(--c-success-bg);   color: var(--c-success); }
+  &--overdue { background: var(--c-danger-bg);    color: var(--c-danger); }
+}
+
+/* ── Content wrapper ─────────────────────────────────────────────────────── */
+.today-content { padding: 12px 12px 8px; }
+
+/* ── Task list container ─────────────────────────────────────────────────── */
+.task-list {
+  background: var(--c-surface);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--c-border);
+  overflow: hidden;
+  margin-bottom: var(--sp-2);
+
+  &--overdue { border-color: var(--c-danger-border); }
+}
+
+.section-divider {
+  height: 1px;
+  background: var(--c-border-soft);
+  margin: var(--sp-2) 0;
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+.page-empty {
+  text-align: center;
+  padding: 56px 24px;
+
+  &__icon  { font-size: 40px; margin-bottom: 12px; }
+  &__title { font-size: var(--t-lg); font-weight: 600; color: var(--c-text); margin: 0 0 4px; letter-spacing: -0.01em; }
+  &__sub   { font-size: var(--t-md); color: var(--c-text-2); margin: 0; }
+}
