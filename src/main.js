@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import dayjs from 'dayjs'
 import './styles/tokens.css'
 import './styles/global.css'
 import './styles/patterns.css'
@@ -10,6 +11,7 @@ import { useAuthStore } from './stores/auth.js'
 import { useSyncStore } from './stores/sync.js'
 import { useCategoriesStore } from './stores/categories.js'
 import { useChoresStore } from './stores/chores.js'
+import { useNotifications } from './composables/useNotifications.js'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -60,6 +62,17 @@ router.isReady().then(async () => {
     ])
 
     await choresStore.generateAllInstances()
+
+    // Schedule reminders for all today's pending chores that have time + reminder set
+    const today = dayjs().format('YYYY-MM-DD')
+    const { scheduleChoreReminder } = useNotifications()
+
+    for (const instance of choresStore.instances) {
+      if (instance.date !== today || instance.status !== 'pending') continue
+      const chore = choresStore.chores.find(c => c.id === instance.choreId)
+      if (!chore?.timeSlot || !chore?.reminderMinutesBefore) continue
+      scheduleChoreReminder(chore.title, today, chore.timeSlot, chore.reminderMinutesBefore)
+    }
   }
 })
 
