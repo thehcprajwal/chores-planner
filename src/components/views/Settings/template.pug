@@ -4,6 +4,33 @@ AppShell
     v-container(max-width="680" class="pa-4 pb-24")
       .mb-6
         .settings-section-header
+          span.section-header__label Categories
+        .list-panel(v-if="categoriesStore.categories.length")
+          .cat-list-row(
+            v-for="cat in categoriesStore.categories"
+            :key="cat.id"
+          )
+            .cat-list-row__icon(:style="{ background: cat.color + '22' }")
+              v-icon(size="18" :color="cat.color") {{ mdiIconMap[cat.icon] || 'mdi-tag' }}
+            .cat-list-row__body
+              span.cat-list-row__name {{ cat.name }}
+              span.cat-list-row__count {{ getChoreCount(cat.id) }} {{ getChoreCount(cat.id) === 1 ? 'chore' : 'chores' }}
+            button.icon-btn(@click.stop="openCategoryForm(cat)" title="Edit")
+              v-icon(size="15" :color="'var(--c-text-3)'") mdi-pencil-outline
+            button.icon-btn.icon-btn--danger(@click.stop="deleteCategory(cat)" title="Delete")
+              v-icon(size="15" :color="'var(--c-danger)'") mdi-trash-can-outline
+          .cat-add-row(@click="openCategoryForm()")
+            v-icon(size="18" :color="'var(--c-primary)'") mdi-plus
+            span.cat-add-row__label Add Category
+        .page-empty(v-else style="margin: -12px 0; min-height: 120px")
+          .page-empty__icon 🏷️
+          p.page-empty__title No categories yet
+          p.page-empty__sub Create your first category
+          button.cat-empty-add(@click="openCategoryForm()")
+            v-icon(size="16") mdi-plus
+            span Add Category
+      .mb-6
+        .settings-section-header
           span.section-header__label Data Backup
         p.backup-notice All data is stored locally on this device. Use cloud sync to back up and restore on other devices.
         .list-panel
@@ -35,6 +62,37 @@ AppShell
               span.action-sub {{ lastSyncLabel }}
             v-icon(size="14" :color="'var(--c-text-3)'") mdi-chevron-right
       p.app-version Chores Planner · v1.0
+  //- Category form dialog
+  v-dialog(v-model="catFormOpen" max-width="400" persistent)
+    v-card(rounded="xl" elevation="0" :style="{ border: '1px solid var(--c-border)' }")
+      v-toolbar(color="white" flat height="52")
+        v-btn(icon="mdi-close" variant="text" size="small" @click="catFormOpen = false")
+        v-toolbar-title.cat-dialog-title {{ editingCat ? 'Edit Category' : 'New Category' }}
+        v-spacer
+        v-btn(variant="flat" color="primary" size="small" rounded="lg" class="mr-2" @click="saveCategoryForm") Save
+      v-divider
+      v-card-text.pa-4
+        v-text-field(v-model="catForm.name" placeholder="Category name" variant="plain" density="comfortable" class="mb-2" autofocus hide-details)
+        .picker-label Color
+        .color-picker.mb-4
+          button.color-swatch(
+            v-for="color in colorPalette"
+            :key="color"
+            :class="{ 'color-swatch--active': catForm.color === color }"
+            :style="{ background: color }"
+            @click="catForm.color = color"
+          )
+        .picker-label Icon
+        .icon-picker
+          button.icon-swatch(
+            v-for="icon in iconOptions"
+            :key="icon.key"
+            :class="{ 'icon-swatch--active': catForm.icon === icon.key }"
+            @click="catForm.icon = icon.key"
+          )
+            v-icon(size="18" :color="catForm.icon === icon.key ? 'var(--c-primary)' : 'var(--c-text-2)'") {{ icon.mdi }}
+        .cat-delete-row(v-if="editingCat")
+          button.cat-delete-btn(@click="deleteCategory(editingCat)") Delete category
   ConfirmDialog(
     v-model="confirmState.open"
     :title="confirmState.title"
