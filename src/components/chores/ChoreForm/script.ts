@@ -20,7 +20,7 @@ export default defineComponent({
 
     const choresStore     = useChoresStore()
     const categoriesStore = useCategoriesStore()
-    const { requestPermission } = useNotifications()
+    const { requestPermission, scheduleChoreReminder } = useNotifications()
 
     const formRef       = ref(null)
     const isEditing     = ref(false)
@@ -177,6 +177,18 @@ export default defineComponent({
       } else {
         await choresStore.addOneOffChore({ ...choreData, date: form.value.date })
       }
+
+      // Schedule reminder for today's chores with time and reminder set
+      const today = dayjs().format('YYYY-MM-DD')
+      if (form.value.date === today && form.value.timeSlot && form.value.reminderMinutesBefore) {
+        scheduleChoreReminder(
+          form.value.title,
+          today,
+          form.value.timeSlot,
+          form.value.reminderMinutesBefore
+        )
+      }
+
       emit('saved')
       close()
     }
