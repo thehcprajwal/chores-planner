@@ -14,11 +14,16 @@ registerRoute(new NavigationRoute(createHandlerBoundToURL('index.html')))
 self.addEventListener('message', event => {
   if (!event.data || event.data.type !== 'SHOW_NOTIFICATION') return
   const { title, body, icon } = event.data
+  const notificationOptions = {
+    body,
+    badge: icon || 'pwa-192x192.png',
+    requireInteraction: false,
+  }
+  // Only set icon if provided and valid
+  if (icon) {
+    notificationOptions.icon = icon
+  }
   event.waitUntil(
-    self.registration.showNotification(title, {
-      body,
-      icon: icon || '/pwa-192x192.png',
-      badge: '/pwa-192x192.png',
-    })
+    self.registration.showNotification(title, notificationOptions)
   )
 })

@@ -23,15 +23,28 @@ export function useNotifications() {
     if (delay <= 0) return null
 
     const timerId = setTimeout(() => {
+      const iconUrl = new URL('/pwa-192x192.png', window.location.origin).href
+
+      // Try Service Worker first (preferred for PWA)
       if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
         navigator.serviceWorker.controller.postMessage({
           type: 'SHOW_NOTIFICATION',
           title,
           body,
-          icon: '/pwa-192x192.png',
+          icon: iconUrl,
         })
-      } else {
-        new Notification(title, { body, icon: '/pwa-192x192.png' })
+      } else if ('Notification' in window) {
+        // Fallback: use Notification API directly
+        try {
+          new Notification(title, {
+            body,
+            icon: iconUrl,
+            badge: iconUrl,
+            tag: 'chore-reminder', // Prevents duplicates
+          })
+        } catch (e) {
+          // Silently fail if notification creation fails
+        }
       }
     }, delay)
 
