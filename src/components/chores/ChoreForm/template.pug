@@ -46,7 +46,7 @@ v-dialog(
         .cf-props
 
           //- Category (required)
-          v-menu(:close-on-content-click="true" location="bottom start")
+          v-menu(:close-on-content-click="true" location="bottom start" attach="body")
             template(#activator="{ props: mp }")
               button.cf-row(type="button" v-bind="mp" :class="{ 'cf-row--error': categoryError }")
                 .cf-row__icon
@@ -69,15 +69,14 @@ v-dialog(
 
           v-divider.cf-row-div
 
-          //- Date (hidden when recurring)
-          template(v-if="!form.recurrence")
-            button.cf-row(type="button" @click="dateDialog = true")
-              .cf-row__icon
-                v-icon(size="15" color="var(--c-text-2)") mdi-calendar-outline
-              span.cf-row__label Date
-              span.cf-row__val.cf-row__val--set {{ formatDateLabel(form.date) }}
-              v-icon(size="14" color="var(--c-text-3)") mdi-chevron-right
-            v-divider.cf-row-div
+          //- Date
+          button.cf-row(type="button" @click="dateDialog = true")
+            .cf-row__icon
+              v-icon(size="15" color="var(--c-text-2)") mdi-calendar-outline
+            span.cf-row__label Date
+            span.cf-row__val.cf-row__val--set {{ formatDateLabel(form.date) }}
+            v-icon(size="14" color="var(--c-text-3)") mdi-chevron-right
+          v-divider.cf-row-div
 
           //- Time
           button.cf-row(type="button" @click="timeDialog = true")
@@ -91,7 +90,7 @@ v-dialog(
           //- Reminder (only when time is set)
           template(v-if="form.timeSlot")
             v-divider.cf-row-div
-            v-menu(:close-on-content-click="true" location="bottom start")
+            v-menu(:close-on-content-click="true" location="bottom start" attach="body")
               template(#activator="{ props: mp }")
                 button.cf-row(type="button" v-bind="mp")
                   .cf-row__icon
