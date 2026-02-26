@@ -1,4 +1,4 @@
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref, watch, nextTick } from 'vue'
 import dayjs from 'dayjs'
 
 export default defineComponent({
@@ -24,14 +24,18 @@ export default defineComponent({
     const localStartDate    = ref(props.modelValue?.startDate    || dayjs().format('YYYY-MM-DD'))
     const localEndDate      = ref(props.modelValue?.endDate      || '')
 
+    let syncingFromProp = false
+
     // Sync state when the form opens with an existing chore (edit mode)
     watch(() => props.modelValue, (val) => {
+      syncingFromProp = true
       localType.value         = val?.type         || ''
       localDaysOfWeek.value   = val?.daysOfWeek   ? [...val.daysOfWeek] : []
       localDayOfMonth.value   = val?.dayOfMonth   || dayjs().date()
       localIntervalDays.value = val?.intervalDays || 7
       localStartDate.value    = val?.startDate    || dayjs().format('YYYY-MM-DD')
       localEndDate.value      = val?.endDate      || ''
+      nextTick(() => { syncingFromProp = false })
     })
 
     function selectType(val) {
@@ -69,7 +73,7 @@ export default defineComponent({
 
     watch(
       [localType, localDaysOfWeek, localDayOfMonth, localIntervalDays, localStartDate, localEndDate],
-      emitValue,
+      () => { if (!syncingFromProp) emitValue() },
       { deep: true }
     )
 
