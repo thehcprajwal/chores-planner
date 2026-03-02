@@ -6,10 +6,10 @@ A modern, feature-rich Progressive Web App for managing household chores and tas
 
 - 📅 **Multiple Views** — Today, Week, Month views with smart scheduling
 - 🔄 **Recurring Chores** — Flexible recurrence patterns (daily, weekly, monthly, custom)
-- 👥 **Assignees & Categories** — Organize chores by category and assign to household members
+- 🏷️ **Categories** — Organize chores by custom categories with colors and icons
 - 📱 **Responsive Design** — Works seamlessly on mobile, tablet, and desktop
 - 🌐 **Offline First** — Full PWA support with Workbox service worker
-- ☁️ **Cloud Sync** — Firebase Auth + Firestore for multi-device sync
+- ☁️ **Cloud Sync** — Firebase Auth + Firestore for cloud backup across devices
 - 🔔 **Notifications** — Web Notifications API for task reminders
 - 📊 **History Tracking** — Review completed chores and track patterns
 - 🎨 **Beautiful UI** — Vuetify 3 components with custom design tokens
