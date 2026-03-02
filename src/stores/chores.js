@@ -247,9 +247,8 @@ export const useChoresStore = defineStore('chores', () => {
   // ── Export / Import ───────────────────────────────────────────────────────
 
   async function exportData() {
-    const [cats, assignees, allChores, allInstances] = await Promise.all([
+    const [cats, allChores, allInstances] = await Promise.all([
       db.categories.toArray(),
-      db.assignees.toArray(),
       db.chores.toArray(),
       db.choreInstances.toArray(),
     ])
@@ -257,7 +256,6 @@ export const useChoresStore = defineStore('chores', () => {
       version: 1,
       exportedAt: dayjs().toISOString(),
       categories: cats,
-      assignees,
       chores: allChores,
       choreInstances: allInstances,
     }
@@ -265,15 +263,15 @@ export const useChoresStore = defineStore('chores', () => {
 
   async function importData(data) {
     if (!data || data.version !== 1) throw new Error('Invalid backup format')
-    await db.transaction('rw', [db.categories, db.assignees, db.chores, db.choreInstances], async () => {
+    // Strip proxies from imported data to ensure IndexedDB can clone it
+    const plainData = toPlain(data)
+    await db.transaction('rw', [db.categories, db.chores, db.choreInstances], async () => {
       await db.categories.clear()
-      await db.assignees.clear()
       await db.chores.clear()
       await db.choreInstances.clear()
-      await db.categories.bulkAdd(data.categories)
-      await db.assignees.bulkAdd(data.assignees)
-      await db.chores.bulkAdd(data.chores)
-      await db.choreInstances.bulkAdd(data.choreInstances)
+      await db.categories.bulkAdd(plainData.categories)
+      await db.chores.bulkAdd(plainData.chores)
+      await db.choreInstances.bulkAdd(plainData.choreInstances)
     })
     await load()
   }

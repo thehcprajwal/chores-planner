@@ -19,16 +19,30 @@ export default defineComponent({
       categoriesStore.categories.find(c => c.id === chore.value?.categoryId)
     )
     const accentColor = computed(() => category.value?.color ?? 'var(--c-primary)')
-    const isOverdue = computed(() => {
-      if (props.instance.status !== 'pending') return false
-      const today = dayjs().format('YYYY-MM-DD')
-      if (props.instance.date < today) return true
-      if (props.instance.date === today && props.instance.timeSlot) {
-        const [h, m] = props.instance.timeSlot.split(':').map(Number)
-        return dayjs().isAfter(dayjs().startOf('day').add(h, 'hour').add(m, 'minute'))
+
+    const overdueLabel = computed(() => {
+      if (props.instance.status !== 'pending') return null
+      const now = dayjs()
+      const todayStr = now.format('YYYY-MM-DD')
+
+      if (props.instance.date < todayStr) {
+        const days = now.diff(dayjs(props.instance.date), 'day')
+        return days === 1 ? '1 day overdue' : `${days} days overdue`
       }
-      return false
+      if (props.instance.date === todayStr && props.instance.timeSlot) {
+        const [h, m] = props.instance.timeSlot.split(':').map(Number)
+        const dueTime = now.startOf('day').add(h, 'hour').add(m, 'minute')
+        if (now.isAfter(dueTime)) {
+          const mins = now.diff(dueTime, 'minute')
+          if (mins < 1) return 'just now overdue'
+          if (mins < 60) return `${mins} min overdue`
+          return `${Math.floor(mins / 60)}h overdue`
+        }
+      }
+      return null
     })
+
+    const isOverdue = computed(() => overdueLabel.value !== null)
 
     function formatTime(timeStr) {
       if (!timeStr) return ''
@@ -59,6 +73,6 @@ export default defineComponent({
       toggling.value = false
     }
 
-    return { chore, accentColor, isOverdue, toggling, formatTime, handleDone, handleSkip }
+    return { chore, accentColor, isOverdue, overdueLabel, toggling, formatTime, handleDone, handleSkip }
   },
 })

@@ -9,6 +9,7 @@ AppShell
           .cat-list-row(
             v-for="cat in categoriesStore.categories"
             :key="cat.id"
+            @click="viewCategory(cat)"
           )
             .cat-list-row__icon(:style="{ background: cat.color + '22' }")
               v-icon(size="18" :color="cat.color") {{ mdiIconMap[cat.icon] || 'mdi-tag' }}

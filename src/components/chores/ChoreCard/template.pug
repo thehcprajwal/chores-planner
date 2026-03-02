@@ -15,7 +15,7 @@
   .task-body
     .task-title-row
       span.task-title {{ chore?.title }}
-      span.tag.tag--danger(v-if="isOverdue") Overdue
+      span.tag.tag--danger(v-if="isOverdue") {{ overdueLabel }}
       span.tag.tag--warning(v-if="chore?.isPaused") Paused
     p.task-desc(v-if="chore?.description") {{ chore.description }}
     .task-meta

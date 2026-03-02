@@ -1,4 +1,5 @@
 import { defineComponent, ref, reactive, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import AppShell      from '@/components/layout/AppShell/index.vue'
 import TopBar        from '@/components/layout/TopBar/index.vue'
@@ -29,6 +30,7 @@ const mdiIconMap = Object.fromEntries(iconOptions.map(o => [o.key, o.mdi]))
 export default defineComponent({
   components: { AppShell, TopBar, ConfirmDialog },
   setup() {
+    const router          = useRouter()
     const categoriesStore = useCategoriesStore()
     const choresStore     = useChoresStore()
     const syncStore       = useSyncStore()
@@ -78,16 +80,27 @@ export default defineComponent({
       return choresStore.chores.filter(c => c.categoryId === catId).length
     }
 
+    function viewCategory(cat) {
+      router.push(`/categories/${cat.id}`)
+    }
+
     async function exportData() {
-      const data = await choresStore.exportData()
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-      const url  = URL.createObjectURL(blob)
-      const a    = document.createElement('a')
-      a.href = url
-      a.download = `chores-backup-${dayjs().format('YYYY-MM-DD')}.json`
-      a.click()
-      URL.revokeObjectURL(url)
-      showSnack('Backup downloaded!')
+      try {
+        const data = await choresStore.exportData()
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = `chores-backup-${dayjs().format('YYYY-MM-DD')}.json`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        // Delay revoke to ensure download starts
+        setTimeout(() => URL.revokeObjectURL(url), 100)
+        showSnack('Backup downloaded!')
+      } catch (e) {
+        showSnack(`Export failed: ${e.message}`, 'error')
+      }
     }
     function triggerImport() { fileInput.value?.click() }
     async function importData(event) {
@@ -132,7 +145,7 @@ export default defineComponent({
       syncStore, syncNow, lastSyncLabel,
       categoriesStore, mdiIconMap, colorPalette, iconOptions,
       catFormOpen, editingCat, catForm,
-      openCategoryForm, saveCategoryForm, deleteCategory,
+      openCategoryForm, saveCategoryForm, deleteCategory, viewCategory,
       getChoreCount,
     }
   },

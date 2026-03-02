@@ -4,15 +4,6 @@ export const db = new Dexie('ChoresPlanner')
 
 db.version(1).stores({
   categories: '++id, name',
-  assignees: '++id, name',
-  chores: '++id, categoryId, assigneeId, createdAt',
-  choreInstances: '++id, choreId, date, status',
-})
-
-// v2: remove assignees table
-db.version(2).stores({
-  categories: '++id, name',
-  assignees: null,
   chores: '++id, categoryId, createdAt',
   choreInstances: '++id, choreId, date, status',
 })
